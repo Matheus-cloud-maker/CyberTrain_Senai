@@ -1,0 +1,3449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberTrain - Treinamento em Segurança da Informação</title>
+    <style>
+        :root {
+            --primary-color: #0a192f;
+            --secondary-color: #112240;
+            --accent-color: #64ffda;
+            --text-color: #e6f1ff;
+            --light-text: #8892b0;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --danger-color: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--secondary-color);
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo h1 {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-left: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--accent-color);
+            background-color: rgba(100, 255, 218, 0.1);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            margin-right: 10px;
+        }
+
+        .btn-login:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+        }
+
+        .btn-signup {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        .btn-signup:hover {
+            background-color: #52e0c4;
+        }
+
+        /* Main Content */
+        main {
+            padding: 40px 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Login/Register Forms */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+        }
+
+        .auth-form {
+            background-color: var(--secondary-color);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light-text);
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #2d3748;
+            background-color: #1a202c;
+            color: var(--text-color);
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--light-text);
+        }
+
+        .auth-switch a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* Dashboard */
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h2 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .dashboard-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .section-card {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-header {
+            background-color: rgba(100, 255, 218, 0.1);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        .section-content p {
+            color: var(--light-text);
+            margin-bottom: 15px;
+        }
+
+        .btn-section {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Conteúdos */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .module-card {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .module-header {
+            padding: 15px;
+            background-color: rgba(100, 255, 218, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .module-title {
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .module-progress {
+            background-color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .module-content {
+            padding: 15px;
+        }
+
+        .module-topics {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .module-topics li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .topic-status {
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .status-completed {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .status-pending {
+            background-color: var(--warning-color);
+            color: black;
+        }
+
+        .btn-module {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Quiz */
+        .quiz-container {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .quiz-progress {
+            width: 100%;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background-color: var(--accent-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .quiz-option:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .quiz-option.selected {
+            background-color: rgba(100, 255, 218, 0.2);
+            border: 1px solid var(--accent-color);
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .quiz-results {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .quiz-score {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        /* Simulações */
+        .simulations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .simulation-card {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .simulation-header {
+            padding: 15px;
+            background-color: rgba(100, 255, 218, 0.1);
+        }
+
+        .simulation-title {
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .simulation-content {
+            padding: 15px;
+        }
+
+        .simulation-description {
+            color: var(--light-text);
+            margin-bottom: 15px;
+        }
+
+        .simulation-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .btn-simulation {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Games */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .game-header {
+            padding: 15px;
+            background-color: rgba(100, 255, 218, 0.1);
+            text-align: center;
+        }
+
+        .game-title {
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .game-content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .game-description {
+            color: var(--light-text);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .btn-game {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Páginas de Simulações e Games */
+        .simulation-page, .game-page {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .simulation-content, .game-content {
+            margin-top: 20px;
+        }
+
+        .simulation-scenario, .game-scenario {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .simulation-task, .game-task {
+            margin-bottom: 15px;
+        }
+
+        .task-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .task-option {
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .task-option:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .task-option.selected {
+            background-color: rgba(100, 255, 218, 0.2);
+            border: 1px solid var(--accent-color);
+        }
+
+        .simulation-result, .game-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .result-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            border: 1px solid var(--success-color);
+        }
+
+        .result-failure {
+            background-color: rgba(244, 67, 54, 0.2);
+            border: 1px solid var(--danger-color);
+        }
+
+        .simulation-navigation, .game-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* Elementos específicos para simulações e games */
+        .email-sample {
+            background-color: #2d3748;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .email-header {
+            border-bottom: 1px solid #4a5568;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .incident-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .timeline-event {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            cursor: move;
+        }
+
+        .timeline-event.correct {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .timeline-event.incorrect {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .malware-sample {
+            background-color: #1a202c;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .password-meter {
+            height: 10px;
+            background-color: #2d3748;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .password-strength {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        .strength-weak {
+            background-color: var(--danger-color);
+            width: 25%;
+        }
+
+        .strength-medium {
+            background-color: var(--warning-color);
+            width: 50%;
+        }
+
+        .strength-strong {
+            background-color: var(--success-color);
+            width: 75%;
+        }
+
+        .strength-very-strong {
+            background-color: var(--accent-color);
+            width: 100%;
+        }
+
+        /* Recursos */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .resource-header {
+            padding: 15px;
+            background-color: rgba(100, 255, 218, 0.1);
+        }
+
+        .resource-title {
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .resource-content {
+            padding: 15px;
+        }
+
+        .resource-description {
+            color: var(--light-text);
+            margin-bottom: 15px;
+        }
+
+        .btn-resource {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .resource-content-page {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .glossary-list, .tools-list, .checklists-list, .reports-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .glossary-item, .tool-item, .checklist-item, .report-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .glossary-term {
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        /* Desempenho */
+        .performance-container {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 30px;
+        }
+
+        .performance-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .performance-chart {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .performance-achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .achievement-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .achievement-title {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .achievement-description {
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feedback-form textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #2d3748;
+            background-color: #1a202c;
+            color: var(--text-color);
+            min-height: 150px;
+            margin-bottom: 20px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star.active {
+            color: #FFC107;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            padding: 20px 0;
+            text-align: center;
+            color: var(--light-text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 5px;
+            }
+
+            .user-actions {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <h1>CyberTrain</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-page="dashboard">Início</a></li>
+                    <li><a href="#" class="nav-link" data-page="conteudos">Conteúdos</a></li>
+                    <li><a href="#" class="nav-link" data-page="simulacoes">Simulações</a></li>
+                    <li><a href="#" class="nav-link" data-page="games">Games</a></li>
+                    <li><a href="#" class="nav-link" data-page="desempenho">Desempenho</a></li>
+                    <li><a href="#" class="nav-link" data-page="recursos">Recursos</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <button class="btn btn-login" id="logout-btn">Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Página de Login -->
+            <div class="page active" id="login-page">
+                <div class="auth-container">
+                    <div class="auth-form">
+                        <h2>Login</h2>
+                        <div class="form-group">
+                            <label for="login-email">E-mail</label>
+                            <input type="email" id="login-email" placeholder="seu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Senha</label>
+                            <input type="password" id="login-password" placeholder="Sua senha">
+                        </div>
+                        <button class="btn btn-signup" id="login-btn" style="width: 100%;">Entrar</button>
+                        <div class="auth-switch">
+                            Não tem uma conta? <a href="#" id="show-register">Cadastre-se</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Cadastro -->
+            <div class="page" id="register-page">
+                <div class="auth-container">
+                    <div class="auth-form">
+                        <h2>Cadastro</h2>
+                        <div class="form-group">
+                            <label for="register-name">Nome Completo</label>
+                            <input type="text" id="register-name" placeholder="Seu nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">E-mail</label>
+                            <input type="email" id="register-email" placeholder="seu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Senha</label>
+                            <input type="password" id="register-password" placeholder="Crie uma senha">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm">Confirmar Senha</label>
+                            <input type="password" id="register-confirm" placeholder="Confirme sua senha">
+                        </div>
+                        <button class="btn btn-signup" id="register-btn" style="width: 100%;">Cadastrar</button>
+                        <div class="auth-switch">
+                            Já tem uma conta? <a href="#" id="show-login">Faça login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página Principal (Dashboard) -->
+            <div class="page" id="dashboard-page">
+                <div class="dashboard-header">
+                    <h2>Dashboard</h2>
+                    <p>Bem-vindo de volta ao CyberTrain! Continue seu treinamento em segurança da informação.</p>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <h3>Pontuação Geral</h3>
+                        <div class="stat-value" id="overall-score">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Conteúdos Concluídos</h3>
+                        <div class="stat-value" id="completed-content">0/30</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tempo de Estudo</h3>
+                        <div class="stat-value" id="study-time">0h 0m</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Conquistas</h3>
+                        <div class="stat-value" id="achievements-count">0/15</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sections">
+                    <div class="section-card">
+                        <div class="section-header">
+                            <span class="section-icon">📚</span>
+                            <h3>Conteúdos</h3>
+                        </div>
+                        <div class="section-content">
+                            <p>Acesse os módulos de aprendizado sobre segurança da informação.</p>
+                            <a href="#" class="btn-section nav-link" data-page="conteudos">Ver Conteúdos</a>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-header">
+                            <span class="section-icon">🖥️</span>
+                            <h3>Simulações</h3>
+                        </div>
+                        <div class="section-content">
+                            <p>Pratique com simulações interativas de cenários de segurança.</p>
+                            <a href="#" class="btn-section nav-link" data-page="simulacoes">Ver Simulações</a>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-header">
+                            <span class="section-icon">🎮</span>
+                            <h3>Games</h3>
+                        </div>
+                        <div class="section-content">
+                            <p>Aprenda de forma divertida com jogos educativos de segurança.</p>
+                            <a href="#" class="btn-section nav-link" data-page="games">Ver Games</a>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-header">
+                            <span class="section-icon">📊</span>
+                            <h3>Desempenho</h3>
+                        </div>
+                        <div class="section-content">
+                            <p>Acompanhe seu progresso e conquistas no treinamento.</p>
+                            <a href="#" class="btn-section nav-link" data-page="desempenho">Ver Desempenho</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Conteúdos -->
+            <div class="page" id="conteudos-page">
+                <div class="dashboard-header">
+                    <h2>Conteúdos</h2>
+                    <p>Explore os módulos de aprendizado sobre segurança da informação.</p>
+                </div>
+
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-title">Fundamentos de Segurança do Senai</div>
+                            <div class="module-progress">0/5</div>
+                        </div>
+                        <div class="module-content">
+                            <ul class="module-topics">
+                                <li>Introdução à Segurança da Informação <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Princípios Básicos de Segurança <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Ameaças e Vulnerabilidades <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Políticas de Segurança <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Gestão de Riscos <span class="topic-status status-pending">Pendente</span></li>
+                            </ul>
+                            <a href="#" class="btn-module start-quiz" data-module="fundamentos">Iniciar Quiz</a>
+                        </div>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-title">Segurança em Redes do Senai</div>
+                            <div class="module-progress">0/5</div>
+                        </div>
+                        <div class="module-content">
+                            <ul class="module-topics">
+                                <li>Arquitetura de Redes Seguras <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Protocolos de Segurança <span class="topic-status status-pending">Pendente</span></li>
+                                <li>VPNs e Túneis Seguros <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Monitoramento de Rede <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Segurança em Redes Sem Fio <span class="topic-status status-pending">Pendente</span></li>
+                            </ul>
+                            <a href="#" class="btn-module start-quiz" data-module="redes">Iniciar Quiz</a>
+                        </div>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-title">Criptografia do Senai</div>
+                            <div class="module-progress">0/5</div>
+                        </div>
+                        <div class="module-content">
+                            <ul class="module-topics">
+                                <li>Conceitos Básicos de Criptografia <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Criptografia Simétrica e Assimétrica <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Funções Hash e Assinaturas Digitais <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Certificados Digitais e PKI <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Aplicações Práticas de Criptografia <span class="topic-status status-pending">Pendente</span></li>
+                            </ul>
+                            <a href="#" class="btn-module start-quiz" data-module="criptografia">Iniciar Quiz</a>
+                        </div>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-title">Firewalls e IDS/IPS do Senai</div>
+                            <div class="module-progress">0/5</div>
+                        </div>
+                        <div class="module-content">
+                            <ul class="module-topics">
+                                <li>Tipos de Firewalls <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Configuração de Regras <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Sistemas de Detecção de Intrusão <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Sistemas de Prevenção de Intrusão <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Análise de Logs e Alertas <span class="topic-status status-pending">Pendente</span></li>
+                            </ul>
+                            <a href="#" class="btn-module start-quiz" data-module="firewalls">Iniciar Quiz</a>
+                        </div>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-title">Gestão de Identidade e Acesso do Senai</div>
+                            <div class="module-progress">0/5</div>
+                        </div>
+                        <div class="module-content">
+                            <ul class="module-topics">
+                                <li>Autenticação e Autorização <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Controle de Acesso Baseado em Papéis <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Single Sign-On (SSO) <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Gestão de Credenciais <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Auditoria de Acessos <span class="topic-status status-pending">Pendente</span></li>
+                            </ul>
+                            <a href="#" class="btn-module start-quiz" data-module="gestao">Iniciar Quiz</a>
+                        </div>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-title">Análise de Vulnerabilidades do Senai</div>
+                            <div class="module-progress">0/5</div>
+                        </div>
+                        <div class="module-content">
+                            <ul class="module-topics">
+                                <li>Metodologias de Teste de Invasão <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Ferramentas de Varredura de Vulnerabilidades <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Análise de Resultados <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Correção de Vulnerabilidades <span class="topic-status status-pending">Pendente</span></li>
+                                <li>Relatórios de Segurança <span class="topic-status status-pending">Pendente</span></li>
+                            </ul>
+                            <a href="#" class="btn-module start-quiz" data-module="vulnerabilidades">Iniciar Quiz</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Quiz -->
+            <div class="page" id="quiz-page">
+                <div class="quiz-container">
+                    <div class="quiz-header">
+                        <h2 id="quiz-title">Quiz</h2>
+                        <div id="quiz-progress">1/5</div>
+                    </div>
+                    <div class="quiz-progress">
+                        <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
+                    </div>
+                    <div class="quiz-question" id="quiz-question">
+                        Questão será carregada aqui...
+                    </div>
+                    <div class="quiz-options" id="quiz-options">
+                        <!-- As opções serão carregadas dinamicamente -->
+                    </div>
+                    <div class="quiz-navigation">
+                        <button class="btn btn-login" id="quiz-prev" disabled>Anterior</button>
+                        <button class="btn btn-signup" id="quiz-next">Próxima</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Resultados do Quiz -->
+            <div class="page" id="quiz-results-page">
+                <div class="quiz-container">
+                    <div class="quiz-results">
+                        <h2>Resultado do Quiz</h2>
+                        <div class="quiz-score" id="quiz-final-score">0/5</div>
+                        <p id="quiz-result-message">Mensagem de resultado</p>
+                        <button class="btn btn-signup" id="quiz-back-to-content" style="margin-top: 20px;">Voltar para Conteúdos</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Simulações -->
+            <div class="page" id="simulacoes-page">
+                <div class="dashboard-header">
+                    <h2>Simulações</h2>
+                    <p>Pratique com simulações interativas de cenários de segurança.</p>
+                </div>
+
+                <div class="simulations-grid">
+                    <div class="simulation-card">
+                        <div class="simulation-header">
+                            <div class="simulation-title">Configuração de Firewall</div>
+                        </div>
+                        <div class="simulation-content">
+                            <p class="simulation-description">Configure regras de firewall para proteger uma rede corporativa contra ameaças externas.</p>
+                            <div class="simulation-details">
+                                <span>Dificuldade: Médio</span>
+                                <span>Tempo: 15 min</span>
+                            </div>
+                            <a href="#" class="btn-simulation start-simulation" data-simulation="firewall">Iniciar Simulação</a>
+                        </div>
+                    </div>
+
+                    <div class="simulation-card">
+                        <div class="simulation-header">
+                            <div class="simulation-title">Detecção de Phishing</div>
+                        </div>
+                        <div class="simulation-content">
+                            <p class="simulation-description">Identifique e analise e-mails de phishing para proteger os usuários de ataques.</p>
+                            <div class="simulation-details">
+                                <span>Dificuldade: Fácil</span>
+                                <span>Tempo: 10 min</span>
+                            </div>
+                            <a href="#" class="btn-simulation start-simulation" data-simulation="phishing">Iniciar Simulação</a>
+                        </div>
+                    </div>
+
+                    <div class="simulation-card">
+                        <div class="simulation-header">
+                            <div class="simulation-title">Resposta a Incidentes</div>
+                        </div>
+                        <div class="simulation-content">
+                            <p class="simulation-description">Gerencie um incidente de segurança seguindo os protocolos adequados.</p>
+                            <div class="simulation-details">
+                                <span>Dificuldade: Difícil</span>
+                                <span>Tempo: 25 min</span>
+                            </div>
+                            <a href="#" class="btn-simulation start-simulation" data-simulation="incidentes">Iniciar Simulação</a>
+                        </div>
+                    </div>
+
+                    <div class="simulation-card">
+                        <div class="simulation-header">
+                            <div class="simulation-title">Análise de Malware</div>
+                        </div>
+                        <div class="simulation-content">
+                            <p class="simulation-description">Analise amostras de malware para identificar seu comportamento e impacto.</p>
+                            <div class="simulation-details">
+                                <span>Dificuldade: Difícil</span>
+                                <span>Tempo: 20 min</span>
+                            </div>
+                            <a href="#" class="btn-simulation start-simulation" data-simulation="malware">Iniciar Simulação</a>
+                        </div>
+                    </div>
+
+                    <div class="simulation-card">
+                        <div class="simulation-header">
+                            <div class="simulation-title">Teste de Invasão Ética</div>
+                        </div>
+                        <div class="simulation-content">
+                            <p class="simulation-description">Realize um teste de invasão ética em um ambiente controlado.</p>
+                            <div class="simulation-details">
+                                <span>Dificuldade: Avançado</span>
+                                <span>Tempo: 30 min</span>
+                            </div>
+                            <a href="#" class="btn-simulation start-simulation" data-simulation="invasao">Iniciar Simulação</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Páginas Individuais de Simulações -->
+            <!-- Configuração de Firewall -->
+            <div class="page" id="simulation-firewall-page">
+                <div class="simulation-page">
+                    <h2>Configuração de Firewall</h2>
+                    <p>Nesta simulação, você irá configurar um firewall para proteger uma rede corporativa contra ameaças externas.</p>
+                    
+                    <div class="simulation-content">
+                        <div class="simulation-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você é o administrador de rede de uma empresa que precisa configurar um firewall para proteger os servidores internos. A empresa possui:</p>
+                            <ul>
+                                <li>Servidor web (porta 80 e 443)</li>
+                                <li>Servidor de email (porta 25, 110, 143, 465, 587, 993, 995)</li>
+                                <li>Servidor de arquivos (porta 445)</li>
+                                <li>Servidor SSH (porta 22)</li>
+                            </ul>
+                            <p>Configure as regras do firewall para permitir apenas o tráfego necessário.</p>
+                        </div>
+                        
+                        <div class="simulation-task">
+                            <h3>Tarefa 1: Configurar Regras de Entrada</h3>
+                            <p>Selecione quais portas devem estar abertas para entrada de tráfego externo:</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Porta 80 (HTTP)</div>
+                                <div class="task-option" data-correct="true">Porta 443 (HTTPS)</div>
+                                <div class="task-option" data-correct="false">Porta 21 (FTP)</div>
+                                <div class="task-option" data-correct="true">Porta 25 (SMTP)</div>
+                                <div class="task-option" data-correct="false">Porta 23 (Telnet)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-task">
+                            <h3>Tarefa 2: Configurar Regras de Saída</h3>
+                            <p>Selecione quais portas devem estar abertas para saída de tráfego interno:</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Porta 53 (DNS)</div>
+                                <div class="task-option" data-correct="true">Porta 80 (HTTP)</div>
+                                <div class="task-option" data-correct="true">Porta 443 (HTTPS)</div>
+                                <div class="task-option" data-correct="false">Porta 135 (RPC)</div>
+                                <div class="task-option" data-correct="false">Porta 445 (SMB)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-result" id="firewall-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="simulation-navigation">
+                            <button class="btn btn-login" id="firewall-back">Voltar</button>
+                            <button class="btn btn-signup" id="firewall-check">Verificar Configuração</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detecção de Phishing -->
+            <div class="page" id="simulation-phishing-page">
+                <div class="simulation-page">
+                    <h2>Detecção de Phishing</h2>
+                    <p>Nesta simulação, você irá analisar e-mails suspeitos para identificar tentativas de phishing.</p>
+                    
+                    <div class="simulation-content">
+                        <div class="simulation-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você é um analista de segurança responsável por verificar e-mails suspeitos recebidos por funcionários da empresa. Analise os e-mails abaixo e identifique quais são tentativas de phishing.</p>
+                        </div>
+                        
+                        <div class="simulation-task">
+                            <h3>E-mail 1:</h3>
+                            <div class="email-sample">
+                                <div class="email-header">
+                                    <p><strong>De:</strong> suporte@banco-seguro.com</p>
+                                    <p><strong>Para:</strong> cliente@empresa.com</p>
+                                    <p><strong>Assunto:</strong> Atualização Urgente de Segurança da Sua Conta</p>
+                                </div>
+                                <p>Prezado cliente,</p>
+                                <p>Detectamos atividade suspeita em sua conta. Para evitar o bloqueio, clique no link abaixo para verificar suas informações:</p>
+                                <p><a href="http://banco-segur0.com/verificar" style="color: #64ffda;">http://banco-segur0.com/verificar</a></p>
+                                <p>Atenciosamente,<br>Equipe de Segurança do Banco Seguro</p>
+                            </div>
+                            <p>Este e-mail é phishing?</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Sim</div>
+                                <div class="task-option" data-correct="false">Não</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-task">
+                            <h3>E-mail 2:</h3>
+                            <div class="email-sample">
+                                <div class="email-header">
+                                    <p><strong>De:</strong> google-noreply@google.com</p>
+                                    <p><strong>Para:</strong> usuario@gmail.com</p>
+                                    <p><strong>Assunto:</strong> Atividade de login nova detectada</p>
+                                </div>
+                                <p>Olá,</p>
+                                <p>Uma nova atividade de login foi detectada em sua conta do Google. Se foi você, ignore este e-mail. Caso contrário, verifique sua conta em:</p>
+                                <p><a href="https://myaccount.google.com/security" style="color: #64ffda;">https://myaccount.google.com/security</a></p>
+                                <p>Obrigado,<br>Equipe do Google</p>
+                            </div>
+                            <p>Este e-mail é phishing?</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="false">Sim</div>
+                                <div class="task-option" data-correct="true">Não</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-result" id="phishing-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="simulation-navigation">
+                            <button class="btn btn-login" id="phishing-back">Voltar</button>
+                            <button class="btn btn-signup" id="phishing-check">Verificar Respostas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resposta a Incidentes -->
+            <div class="page" id="simulation-incidentes-page">
+                <div class="simulation-page">
+                    <h2>Resposta a Incidentes</h2>
+                    <p>Nesta simulação, você irá gerenciar um incidente de segurança seguindo os protocolos adequados.</p>
+                    
+                    <div class="simulation-content">
+                        <div class="simulation-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Um funcionário relatou que clicou em um link suspeito em um e-mail e agora seu computador está com comportamento estranho. Como especialista em segurança, você precisa seguir o protocolo de resposta a incidentes.</p>
+                        </div>
+                        
+                        <div class="simulation-task">
+                            <h3>Ordenar as Ações:</h3>
+                            <p>Arraste as ações na ordem correta de resposta ao incidente:</p>
+                            <div class="incident-timeline" id="incident-timeline">
+                                <div class="timeline-event" data-correct="1">Isolar a estação de trabalho da rede</div>
+                                <div class="timeline-event" data-correct="2">Coletar evidências do incidente</div>
+                                <div class="timeline-event" data-correct="3">Identificar a natureza e escopo do ataque</div>
+                                <div class="timeline-event" data-correct="4">Eliminar a ameaça e restaurar sistemas</div>
+                                <div class="timeline-event" data-correct="5">Documentar lições aprendidas</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-result" id="incidentes-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="simulation-navigation">
+                            <button class="btn btn-login" id="incidentes-back">Voltar</button>
+                            <button class="btn btn-signup" id="incidentes-check">Verificar Ordem</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Análise de Malware -->
+            <div class="page" id="simulation-malware-page">
+                <div class="simulation-page">
+                    <h2>Análise de Malware</h2>
+                    <p>Nesta simulação, você irá analisar amostras de malware para identificar seu comportamento.</p>
+                    
+                    <div class="simulation-content">
+                        <div class="simulation-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você recebeu um arquivo suspeito que um funcionário baixou acidentalmente. Sua tarefa é analisar o comportamento do malware.</p>
+                        </div>
+                        
+                        <div class="simulation-task">
+                            <h3>Análise do Comportamento:</h3>
+                            <p>Analise o código abaixo e identifique quais comportamentos maliciosos estão presentes:</p>
+                            <div class="malware-sample">
+                                <pre>
+#include <windows.h>
+#include <fstream>
+
+void stealCredentials() {
+    // Acessa arquivos de credenciais do navegador
+    CopyFile("C:\\Users\\Admin\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Login Data", 
+             "C:\\Temp\\creds.db", FALSE);
+}
+
+void establishPersistence() {
+    // Adiciona entrada no registro para execução automática
+    HKEY hKey;
+    RegOpenKeyEx(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 
+                 0, KEY_SET_VALUE, &hKey);
+    RegSetValueEx(hKey, "WindowsUpdate", 0, REG_SZ, 
+                  (BYTE*)"C:\\Malware\\malware.exe", 26);
+    RegCloseKey(hKey);
+}
+
+void encryptFiles() {
+    // Criptografa arquivos no diretório Documents
+    WIN32_FIND_DATA findFileData;
+    HANDLE hFind = FindFirstFile("C:\\Users\\Admin\\Documents\\*", &findFileData);
+    // Código de criptografia aqui...
+}</pre>
+                            </div>
+                            <p>Selecione os comportamentos maliciosos identificados:</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Roubo de credenciais</div>
+                                <div class="task-option" data-correct="true">Estabelecimento de persistência</div>
+                                <div class="task-option" data-correct="true">Criptografia de arquivos (ransomware)</div>
+                                <div class="task-option" data-correct="false">Keylogging</div>
+                                <div class="task-option" data-correct="false">Ataque DDoS</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-result" id="malware-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="simulation-navigation">
+                            <button class="btn btn-login" id="malware-back">Voltar</button>
+                            <button class="btn btn-signup" id="malware-check">Verificar Análise</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teste de Invasão Ética -->
+            <div class="page" id="simulation-invasao-page">
+                <div class="simulation-page">
+                    <h2>Teste de Invasão Ética</h2>
+                    <p>Nesta simulação, você realizará um teste de invasão ética em um ambiente controlado.</p>
+                    
+                    <div class="simulation-content">
+                        <div class="simulation-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você foi contratado para realizar um teste de penetração em uma empresa. Seu objetivo é identificar vulnerabilidades sem causar danos reais.</p>
+                        </div>
+                        
+                        <div class="simulation-task">
+                            <h3>Fase de Reconhecimento:</h3>
+                            <p>Selecione as técnicas de reconhecimento que você utilizaria:</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Varredura de portas</div>
+                                <div class="task-option" data-correct="true">Enumeração de serviços</div>
+                                <div class="task-option" data-correct="true">OSINT (Open Source Intelligence)</div>
+                                <div class="task-option" data-correct="false">Ataque de força bruta</div>
+                                <div class="task-option" data-correct="false">Exploração de vulnerabilidades</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-task">
+                            <h3>Fase de Exploração:</h3>
+                            <p>Você identificou um servidor web com uma versão antiga do Apache. Qual seria sua próxima ação?</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="false">Explorar imediatamente a vulnerabilidade</div>
+                                <div class="task-option" data-correct="true">Pesquisar exploits conhecidos para a versão</div>
+                                <div class="task-option" data-correct="false">Ignorar e procurar outras vulnerabilidades</div>
+                                <div class="task-option" data-correct="true">Documentar a descoberta para relatório</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-result" id="invasao-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="simulation-navigation">
+                            <button class="btn btn-login" id="invasao-back">Voltar</button>
+                            <button class="btn btn-signup" id="invasao-check">Verificar Abordagem</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Games -->
+            <div class="page" id="games-page">
+                <div class="dashboard-header">
+                    <h2>Games</h2>
+                    <p>Aprenda de forma divertida com jogos educativos de segurança da informação.</p>
+                </div>
+
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="game-header">
+                            <div class="game-title">Caça às Vulnerabilidades</div>
+                        </div>
+                        <div class="game-content">
+                            <p class="game-description">Encontre vulnerabilidades em um sistema antes que os invasores o façam.</p>
+                            <a href="#" class="btn-game start-game" data-game="vulnerabilidades">Jogar</a>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-header">
+                            <div class="game-title">Invasão Ética</div>
+                        </div>
+                        <div class="game-content">
+                            <p class="game-description">Simule uma invasão ética para testar a segurança de sistemas.</p>
+                            <a href="#" class="btn-game start-game" data-game="invasao">Jogar</a>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-header">
+                            <div class="game-title">Firewall Defende</div>
+                        </div>
+                        <div class="game-content">
+                            <p class="game-description">Defenda sua rede contra ataques configurando corretamente o firewall.</p>
+                            <a href="#" class="btn-game start-game" data-game="firewall">Jogar</a>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-header">
+                            <div class="game-title">Senha Forte</div>
+                        </div>
+                        <div class="game-content">
+                            <p class="game-description">Crie senhas fortes e proteja contas contra ataques de força bruta.</p>
+                            <a href="#" class="btn-game start-game" data-game="senha">Jogar</a>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-header">
+                            <div class="game-title">Detetive de Phishing</div>
+                        </div>
+                        <div class="game-content">
+                            <p class="game-description">Identifique e-mails de phishing antes que causem danos.</p>
+                            <a href="#" class="btn-game start-game" data-game="phishing">Jogar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Páginas Individuais de Games -->
+            <!-- Caça às Vulnerabilidades -->
+            <div class="page" id="game-vulnerabilidades-page">
+                <div class="game-page">
+                    <h2>Caça às Vulnerabilidades</h2>
+                    <p>Encontre vulnerabilidades em um sistema antes que os invasores o façam!</p>
+                    
+                    <div class="game-content">
+                        <div class="game-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você é um analista de segurança responsável por encontrar vulnerabilidades em um sistema web antes do lançamento. Examine o código abaixo e identifique as vulnerabilidades:</p>
+                            <div class="malware-sample">
+                                <pre>
+&lt;?php
+$id = $_GET['id'];
+$sql = "SELECT * FROM users WHERE id = " . $id;
+$result = mysql_query($sql);
+?&gt;</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="game-task">
+                            <h3>Identifique as Vulnerabilidades:</h3>
+                            <p>Selecione todas as vulnerabilidades presentes no código:</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Injeção SQL</div>
+                                <div class="task-option" data-correct="false">XSS (Cross-Site Scripting)</div>
+                                <div class="task-option" data-correct="true">Uso de função descontinuada (mysql_query)</div>
+                                <div class="task-option" data-correct="false">CSRF (Cross-Site Request Forgery)</div>
+                                <div class="task-option" data-correct="true">Falta de validação de entrada</div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-result" id="vulnerabilidades-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="game-navigation">
+                            <button class="btn btn-login" id="vulnerabilidades-back">Voltar</button>
+                            <button class="btn btn-signup" id="vulnerabilidades-check">Verificar Respostas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invasão Ética -->
+            <div class="page" id="game-invasao-page">
+                <div class="game-page">
+                    <h2>Invasão Ética</h2>
+                    <p>Neste jogo, você será um hacker ético tentando invadir um sistema para encontrar vulnerabilidades.</p>
+                    
+                    <div class="game-content">
+                        <div class="game-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você tem permissão para testar a segurança de um servidor web. Escolha as ferramentas e técnicas corretas para encontrar vulnerabilidades.</p>
+                        </div>
+                        
+                        <div class="game-task">
+                            <h3>Ferramentas de Teste:</h3>
+                            <p>Selecione as ferramentas adequadas para um teste de invasão ética:</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Nmap - para varredura de portas</div>
+                                <div class="task-option" data-correct="true">Burp Suite - para teste de aplicações web</div>
+                                <div class="task-option" data-correct="true">Metasploit - para exploração de vulnerabilidades</div>
+                                <div class="task-option" data-correct="false">LOIC - para ataques DDoS</div>
+                                <div class="task-option" data-correct="false">Keylogger - para captura de teclas</div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-task">
+                            <h3>Técnicas Apropriadas:</h3>
+                            <p>Quais técnicas são apropriadas em um teste de invasão ética?</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">SQL Injection</div>
+                                <div class="task-option" data-correct="true">Cross-Site Scripting (XSS)</div>
+                                <div class="task-option" data-correct="true">Exploração de vulnerabilidades conhecidas</div>
+                                <div class="task-option" data-correct="false">Ataque a sistemas de terceiros</div>
+                                <div class="task-option" data-correct="false">Destruição de dados</div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-result" id="invasao-game-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="game-navigation">
+                            <button class="btn btn-login" id="invasao-game-back">Voltar</button>
+                            <button class="btn btn-signup" id="invasao-game-check">Verificar Escolhas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Firewall Defende -->
+            <div class="page" id="game-firewall-page">
+                <div class="game-page">
+                    <h2>Firewall Defende</h2>
+                    <p>Defenda sua rede contra ataques configurando corretamente as regras do firewall!</p>
+                    
+                    <div class="game-content">
+                        <div class="game-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você é o administrador de rede responsável por configurar um firewall. Ataques estão chegando constantemente e você precisa bloquear as ameaças.</p>
+                        </div>
+                        
+                        <div class="game-task">
+                            <h3>Tipos de Ataque:</h3>
+                            <p>Relacione cada tipo de ataque com a regra de firewall adequada para bloqueá-lo:</p>
+                            <div class="task-options">
+                                <div class="task-option" data-match="port-scan">Varredura de portas</div>
+                                <div class="task-option" data-match="ddos">Ataque DDoS</div>
+                                <div class="task-option" data-match="sql-injection">Injeção SQL</div>
+                                <div class="task-option" data-match="malware">Download de malware</div>
+                            </div>
+                            
+                            <div class="task-options" style="margin-top: 20px;">
+                                <div class="task-option" data-match="port-scan">Limitar varreduras de portas consecutivas</div>
+                                <div class="task-option" data-match="ddos">Rate limiting por IP</div>
+                                <div class="task-option" data-match="sql-injection">Filtro de padrões SQL nas requisições</div>
+                                <div class="task-option" data-match="malware">Bloquear downloads de arquivos executáveis</div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-result" id="firewall-game-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="game-navigation">
+                            <button class="btn btn-login" id="firewall-game-back">Voltar</button>
+                            <button class="btn btn-signup" id="firewall-game-check">Verificar Combinações</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Senha Forte -->
+            <div class="page" id="game-senha-page">
+                <div class="game-page">
+                    <h2>Senha Forte</h2>
+                    <p>Crie senhas fortes e aprenda a proteger suas contas contra ataques!</p>
+                    
+                    <div class="game-content">
+                        <div class="game-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você precisa criar senhas seguras para diferentes serviços. Avalie a força das senhas e melhore-as quando necessário.</p>
+                        </div>
+                        
+                        <div class="game-task">
+                            <h3>Avalie as Senhas:</h3>
+                            <p>Classifique a força destas senhas:</p>
+                            
+                            <div class="password-sample">
+                                <p><strong>Senha:</strong> "password123"</p>
+                                <div class="password-meter">
+                                    <div class="password-strength strength-weak"></div>
+                                </div>
+                                <p>Esta senha é:</p>
+                                <div class="task-options">
+                                    <div class="task-option" data-correct="true">Fraca</div>
+                                    <div class="task-option" data-correct="false">Média</div>
+                                    <div class="task-option" data-correct="false">Forte</div>
+                                </div>
+                            </div>
+                            
+                            <div class="password-sample" style="margin-top: 20px;">
+                                <p><strong>Senha:</strong> "C@bana#2024!Segura"</p>
+                                <div class="password-meter">
+                                    <div class="password-strength strength-very-strong"></div>
+                                </div>
+                                <p>Esta senha é:</p>
+                                <div class="task-options">
+                                    <div class="task-option" data-correct="false">Fraca</div>
+                                    <div class="task-option" data-correct="false">Média</div>
+                                    <div class="task-option" data-correct="true">Forte</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-task">
+                            <h3>Dicas para Senhas Fortes:</h3>
+                            <p>Selecione as características de uma senha forte:</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Mínimo de 12 caracteres</div>
+                                <div class="task-option" data-correct="true">Combinação de maiúsculas, minúsculas, números e símbolos</div>
+                                <div class="task-option" data-correct="true">Não contém palavras do dicionário</div>
+                                <div class="task-option" data-correct="false">Baseada em informações pessoais</div>
+                                <div class="task-option" data-correct="false">Usada em múltiplas contas</div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-result" id="senha-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="game-navigation">
+                            <button class="btn btn-login" id="senha-back">Voltar</button>
+                            <button class="btn btn-signup" id="senha-check">Verificar Respostas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detetive de Phishing -->
+            <div class="page" id="game-phishing-page">
+                <div class="game-page">
+                    <h2>Detetive de Phishing</h2>
+                    <p>Identifique e-mails de phishing antes que causem danos à organização!</p>
+                    
+                    <div class="game-content">
+                        <div class="game-scenario">
+                            <h3>Cenário:</h3>
+                            <p>Você é o detetive de phishing da empresa. Analise os e-mails suspeitos e identifique os sinais de phishing.</p>
+                        </div>
+                        
+                        <div class="game-task">
+                            <h3>Identifique os Sinais:</h3>
+                            <p>Analise este e-mail e selecione os sinais de phishing:</p>
+                            <div class="email-sample">
+                                <div class="email-header">
+                                    <p><strong>De:</strong> amazon-security@amaz0n-support.com</p>
+                                    <p><strong>Para:</strong> cliente@empresa.com</p>
+                                    <p><strong>Assunto:</strong> ALERTA: Sua conta será suspensa</p>
+                                </div>
+                                <p>Prezado cliente,</p>
+                                <p>Detectamos atividade incomum em sua conta Amazon. Para evitar a suspensão, verifique suas informações agora:</p>
+                                <p><a href="http://amaz0n-verification.com/account" style="color: #64ffda;">CLIQUE AQUI PARA VERIFICAR</a></p>
+                                <p><em>Este é um e-mail automático, não responda.</em></p>
+                            </div>
+                            <p>Quais são os sinais de phishing neste e-mail?</p>
+                            <div class="task-options">
+                                <div class="task-option" data-correct="true">Domínio do remetente incorreto (amaz0n)</div>
+                                <div class="task-option" data-correct="true">URL suspeita sem HTTPS</div>
+                                <div class="task-option" data-correct="true">Sensação de urgência artificial</div>
+                                <div class="task-option" data-correct="false">Saudação personalizada</div>
+                                <div class="task-option" data-correct="false">Logotipo da empresa</div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-result" id="phishing-game-result">
+                            <!-- Resultado será preenchido via JavaScript -->
+                        </div>
+                        
+                        <div class="game-navigation">
+                            <button class="btn btn-login" id="phishing-game-back">Voltar</button>
+                            <button class="btn btn-signup" id="phishing-game-check">Verificar Análise</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Desempenho -->
+            <div class="page" id="desempenho-page">
+                <div class="dashboard-header">
+                    <h2>Desempenho</h2>
+                    <p>Acompanhe seu progresso e conquistas no treinamento.</p>
+                </div>
+
+                <div class="performance-container">
+                    <div class="performance-stats">
+                        <div class="stat-card">
+                            <h3>Pontuação Geral</h3>
+                            <div class="stat-value" id="performance-score">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Conteúdos Concluídos</h3>
+                            <div class="stat-value" id="performance-content">0/30</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Simulações Concluídas</h3>
+                            <div class="stat-value" id="performance-simulations">0/10</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Games Concluídos</h3>
+                            <div class="stat-value" id="performance-games">0/7</div>
+                        </div>
+                    </div>
+
+                    <div class="performance-chart">
+                        <p>Gráfico de Progresso (Implementação Futura)</p>
+                    </div>
+
+                    <h3 style="margin-bottom: 20px;">Conquistas</h3>
+                    <div class="performance-achievements">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🥇</div>
+                            <div class="achievement-title">Primeiros Passos</div>
+                            <div class="achievement-description">Complete seu primeiro conteúdo</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🛡️</div>
+                            <div class="achievement-title">Defensor</div>
+                            <div class="achievement-description">Complete 5 simulações</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🎮</div>
+                            <div class="achievement-title">Jogador</div>
+                            <div class="achievement-description">Complete 3 games</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">📚</div>
+                            <div class="achievement-title">Estudioso</div>
+                            <div class="achievement-description">Complete 10 conteúdos</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">⚡</div>
+                            <div class="achievement-title">Rápido</div>
+                            <div class="achievement-description">Complete um quiz em menos de 5 minutos</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">💯</div>
+                            <div class="achievement-title">Perfeccionista</div>
+                            <div class="achievement-description">Acertar todas as questões de um quiz</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Recursos -->
+            <div class="page" id="recursos-page">
+                <div class="dashboard-header">
+                    <h2>Recursos</h2>
+                    <p>Ferramentas e materiais de apoio para seu aprendizado em segurança da informação.</p>
+                </div>
+
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-header">
+                            <div class="resource-title">Glossário</div>
+                        </div>
+                        <div class="resource-content">
+                            <p class="resource-description">Dicionário completo com termos e conceitos de segurança da informação.</p>
+                            <a href="#" class="btn-resource open-resource" data-resource="glossario">Acessar</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-header">
+                            <div class="resource-title">Ferramentas</div>
+                        </div>
+                        <div class="resource-content">
+                            <p class="resource-description">Lista de ferramentas úteis para profissionais de segurança.</p>
+                            <a href="#" class="btn-resource open-resource" data-resource="ferramentas">Acessar</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-header">
+                            <div class="resource-title">Checklists</div>
+                        </div>
+                        <div class="resource-content">
+                            <p class="resource-description">Checklists para auditorias e implementações de segurança.</p>
+                            <a href="#" class="btn-resource open-resource" data-resource="checklists">Acessar</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-header">
+                            <div class="resource-title">Relatórios</div>
+                        </div>
+                        <div class="resource-content">
+                            <p class="resource-description">Modelos de relatórios para documentação de segurança.</p>
+                            <a href="#" class="btn-resource open-resource" data-resource="relatorios">Acessar</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-header">
+                            <div class="resource-title">Feedback</div>
+                        </div>
+                        <div class="resource-content">
+                            <p class="resource-description">Compartilhe sua experiência com a plataforma CyberTrain.</p>
+                            <a href="#" class="btn-resource open-resource" data-resource="feedback">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Páginas de Recursos Individuais -->
+            <!-- Glossário -->
+            <div class="page" id="resource-glossario-page">
+                <div class="resource-content-page">
+                    <h2>Glossário de Segurança da Informação</h2>
+                    <p>Dicionário completo com termos e conceitos de segurança da informação.</p>
+                    
+                    <div class="glossary-list">
+                        <div class="glossary-item">
+                            <div class="glossary-term">Firewall</div>
+                            <p>Sistema de segurança que controla o tráfego de rede entre redes com diferentes níveis de confiança.</p>
+                        </div>
+                        <div class="glossary-item">
+                            <div class="glossary-term">Phishing</div>
+                            <p>Técnica de engenharia social que utiliza mensagens falsas para obter informações sensíveis.</p>
+                        </div>
+                        <div class="glossary-item">
+                            <div class="glossary-term">Malware</div>
+                            <p>Software malicioso projetado para danificar ou obter acesso não autorizado a sistemas.</p>
+                        </div>
+                        <div class="glossary-item">
+                            <div class="glossary-term">Criptografia</div>
+                            <p>Processo de codificar informações para que apenas destinatários autorizados possam acessá-las.</p>
+                        </div>
+                        <div class="glossary-item">
+                            <div class="glossary-term">VPN</div>
+                            <p>Rede Virtual Privada que permite conexão segura através de redes públicas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="simulation-navigation">
+                        <button class="btn btn-login" id="glossario-back">Voltar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ferramentas -->
+            <div class="page" id="resource-ferramentas-page">
+                <div class="resource-content-page">
+                    <h2>Ferramentas de Segurança</h2>
+                    <p>Lista de ferramentas úteis para profissionais de segurança.</p>
+                    
+                    <div class="tools-list">
+                        <div class="tool-item">
+                            <div class="glossary-term">Wireshark</div>
+                            <p>Analisador de protocolos de rede para solução de problemas e análise de tráfego.</p>
+                        </div>
+                        <div class="tool-item">
+                            <div class="glossary-term">Nmap</div>
+                            <p>Ferramenta de varredura de rede para descobrir hosts e serviços em uma rede.</p>
+                        </div>
+                        <div class="tool-item">
+                            <div class="glossary-term">Metasploit</div>
+                            <p>Framework de teste de penetração para desenvolvimento e execução de exploits.</p>
+                        </div>
+                        <div class="tool-item">
+                            <div class="glossary-term">Burp Suite</div>
+                            <p>Plataforma para teste de segurança de aplicações web.</p>
+                        </div>
+                        <div class="tool-item">
+                            <div class="glossary-term">Nessus</div>
+                            <p>Scanner de vulnerabilidades para identificar falhas de segurança em sistemas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="simulation-navigation">
+                        <button class="btn btn-login" id="ferramentas-back">Voltar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checklists -->
+            <div class="page" id="resource-checklists-page">
+                <div class="resource-content-page">
+                    <h2>Checklists de Segurança</h2>
+                    <p>Checklists para auditorias e implementações de segurança.</p>
+                    
+                    <div class="checklists-list">
+                        <div class="checklist-item">
+                            <div class="glossary-term">Checklist de Segurança de Rede</div>
+                            <p>Verifique firewalls, segmentação de rede, configurações de VPN e monitoramento.</p>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="glossary-term">Checklist de Segurança de Aplicações</div>
+                            <p>Valide autenticação, autorização, validação de entrada e tratamento de erros.</p>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="glossary-term">Checklist de Resposta a Incidentes</div>
+                            <p>Prepare plano de resposta, equipe designada e procedimentos de comunicação.</p>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="glossary-term">Checklist de Segurança Física</div>
+                            <p>Avalie controle de acesso, vigilância e proteção de equipamentos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="simulation-navigation">
+                        <button class="btn btn-login" id="checklists-back">Voltar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relatórios -->
+            <div class="page" id="resource-relatorios-page">
+                <div class="resource-content-page">
+                    <h2>Modelos de Relatórios</h2>
+                    <p>Modelos de relatórios para documentação de segurança.</p>
+                    
+                    <div class="reports-list">
+                        <div class="report-item">
+                            <div class="glossary-term">Relatório de Teste de Penetração</div>
+                            <p>Modelo para documentar resultados de testes de segurança ofensivos.</p>
+                        </div>
+                        <div class="report-item">
+                            <div class="glossary-term">Relatório de Auditoria de Segurança</div>
+                            <p>Template para relatar conformidade com políticas e regulamentos.</p>
+                        </div>
+                        <div class="report-item">
+                            <div class="glossary-term">Relatório de Análise de Vulnerabilidades</div>
+                            <p>Formato para documentar vulnerabilidades identificadas e recomendações.</p>
+                        </div>
+                        <div class="report-item">
+                            <div class="glossary-term">Relatório de Incidente de Segurança</div>
+                            <p>Estrutura para documentar e analisar incidentes de segurança.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="simulation-navigation">
+                        <button class="btn btn-login" id="relatorios-back">Voltar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback -->
+            <div class="page" id="resource-feedback-page">
+                <div class="feedback-container">
+                    <h2>Feedback</h2>
+                    <p>Compartilhe sua experiência com a plataforma CyberTrain.</p>
+                    
+                    <div class="feedback-form">
+                        <div class="form-group">
+                            <label for="feedback-name">Seu Nome</label>
+                            <input type="text" id="feedback-name" placeholder="Seu nome">
+                        </div>
+                        <div class="form-group">
+                            <label for="feedback-email">Seu E-mail</label>
+                            <input type="email" id="feedback-email" placeholder="seu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Avaliação Geral</label>
+                            <div class="rating-stars">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="feedback-message">Sua Mensagem</label>
+                            <textarea id="feedback-message" placeholder="Compartilhe sua experiência, sugestões ou críticas..."></textarea>
+                        </div>
+                        <button class="btn btn-signup" id="feedback-submit" style="width: 100%;">Enviar Feedback</button>
+                    </div>
+                    
+                    <div class="simulation-navigation">
+                        <button class="btn btn-login" id="feedback-back">Voltar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>CyberTrain &copy; 2023 - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dados do usuário
+        let userData = {
+            isLoggedIn: false,
+            name: '',
+            email: '',
+            overallScore: 0,
+            completedContent: 0,
+            studyTime: 0, // em minutos
+            achievements: 0,
+            completedSimulations: 0,
+            completedGames: 0,
+            moduleProgress: {
+                fundamentos: 0,
+                redes: 0,
+                criptografia: 0,
+                firewalls: 0,
+                gestao: 0,
+                vulnerabilidades: 0
+            },
+            completedSimulationsList: [],
+            completedGamesList: []
+        };
+
+        // Estado do quiz atual
+        let currentQuiz = {
+            module: '',
+            questions: [],
+            currentQuestion: 0,
+            score: 0,
+            userAnswers: []
+        };
+
+        // Questões de exemplo para cada módulo
+        const quizQuestions = {
+            fundamentos: [
+                {
+                    question: "O que é a tríade CIA em segurança da informação?",
+                    options: [
+                        "Confidencialidade, Integridade e Disponibilidade",
+                        "Controle, Identificação e Autenticação",
+                        "Criptografia, Infraestrutura e Acesso",
+                        "Contingência, Incidente e Auditoria"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "Qual é o principal objetivo da confidencialidade?",
+                    options: [
+                        "Garantir que as informações estejam acessíveis quando necessário",
+                        "Proteger informações contra divulgação não autorizada",
+                        "Garantir que as informações não sejam alteradas indevidamente",
+                        "Assegurar a autenticidade das informações"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é uma vulnerabilidade em segurança da informação?",
+                    options: [
+                        "Um ataque bem-sucedido a um sistema",
+                        "Uma fraqueza em um sistema que pode ser explorada",
+                        "Uma política de segurança inadequada",
+                        "Um software malicioso"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Qual destes é um exemplo de ameaça à segurança da informação?",
+                    options: [
+                        "Firewall",
+                        "Antivírus",
+                        "Phishing",
+                        "Criptografia"
+                    ],
+                    correct: 2
+                },
+                {
+                    question: "O que é uma política de segurança?",
+                    options: [
+                        "Um conjunto de regras e diretrizes para proteger os recursos de informação",
+                        "Um software de proteção contra vírus",
+                        "Um certificado digital",
+                        "Um procedimento de backup"
+                    ],
+                    correct: 0
+                }
+            ],
+            redes: [
+                {
+                    question: "O que é um firewall?",
+                    options: [
+                        "Um dispositivo que protege contra incêndios em data centers",
+                        "Um sistema que controla o tráfego entre redes com diferentes níveis de confiança",
+                        "Um software para detectar vírus",
+                        "Um protocolo de criptografia"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Qual protocolo é usado para criptografar conexões web?",
+                    options: [
+                        "HTTP",
+                        "FTP",
+                        "HTTPS",
+                        "SMTP"
+                    ],
+                    correct: 2
+                },
+                {
+                    question: "O que é uma VPN?",
+                    options: [
+                        "Uma rede virtual privada que permite conexão segura através de redes públicas",
+                        "Um vírus de computador",
+                        "Um tipo de firewall",
+                        "Um protocolo de email"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "Qual é a principal função de um IDS?",
+                    options: [
+                        "Impedir ataques",
+                        "Detectar atividades suspeitas",
+                        "Criptografar dados",
+                        "Autenticar usuários"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é segmentação de rede?",
+                    options: [
+                        "Dividir uma rede em partes menores para melhorar a segurança",
+                        "Aumentar a velocidade da rede",
+                        "Reduzir o custo da infraestrutura",
+                        "Conectar redes diferentes"
+                    ],
+                    correct: 0
+                }
+            ],
+            criptografia: [
+                {
+                    question: "O que é criptografia?",
+                    options: [
+                        "O estudo de criminosos digitais",
+                        "A prática de codificar informações para proteger seu conteúdo",
+                        "Um tipo de firewall",
+                        "Um protocolo de rede"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Qual é a diferença entre criptografia simétrica e assimétrica?",
+                    options: [
+                        "Simétrica usa uma chave, assimétrica usa duas chaves",
+                        "Simétrica é mais segura que assimétrica",
+                        "Assimétrica é mais rápida que simétrica",
+                        "Não há diferença significativa"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "O que é um certificado digital?",
+                    options: [
+                        "Um documento que comprova propriedade de domínio",
+                        "Uma credencial eletrônica que associa uma entidade a uma chave pública",
+                        "Um tipo de firewall para proteção de dados",
+                        "Um software antivírus"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Qual algoritmo é comumente usado para criptografia assimétrica?",
+                    options: [
+                        "AES",
+                        "RSA",
+                        "MD5",
+                        "DES"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é uma função hash?",
+                    options: [
+                        "Um algoritmo que transforma dados em um valor de tamanho fixo",
+                        "Um tipo de criptografia reversível",
+                        "Um protocolo de autenticação",
+                        "Um sistema de detecção de intrusão"
+                    ],
+                    correct: 0
+                }
+            ],
+            firewalls: [
+                {
+                    question: "Qual é a função principal de um firewall?",
+                    options: [
+                        "Acelerar a conexão de internet",
+                        "Controlar o tráfego entre redes com base em regras de segurança",
+                        "Detectar vírus em arquivos",
+                        "Criptografar dados sensíveis"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é um firewall de aplicação?",
+                    options: [
+                        "Um firewall que inspeciona tráfego na camada de aplicação",
+                        "Um firewall específico para aplicativos móveis",
+                        "Um software de firewall gratuito",
+                        "Um firewall que só protege servidores web"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "Qual é a diferença entre IDS e IPS?",
+                    options: [
+                        "IDS detecta, IPS previne",
+                        "IDS é mais moderno que IPS",
+                        "IPS é apenas para redes pequenas",
+                        "Não há diferença significativa"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "O que é uma regra de firewall 'deny all'?",
+                    options: [
+                        "Uma regra que permite todo o tráfego",
+                        "Uma regra que bloqueia todo o tráfego não explicitamente permitido",
+                        "Uma regra que só permite tráfego HTTP",
+                        "Uma regra temporária"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é NAT (Network Address Translation)?",
+                    options: [
+                        "Uma técnica para mapear endereços IP privados para públicos",
+                        "Um tipo de ataque de rede",
+                        "Um protocolo de criptografia",
+                        "Um sistema de detecção de intrusão"
+                    ],
+                    correct: 0
+                }
+            ],
+            gestao: [
+                {
+                    question: "O que é RBAC?",
+                    options: [
+                        "Um tipo de criptografia",
+                        "Controle de acesso baseado em papéis",
+                        "Um protocolo de rede",
+                        "Um software antivírus"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é autenticação multifator?",
+                    options: [
+                        "Usar múltiplas senhas para uma conta",
+                        "Usar dois ou mais métodos de autenticação diferentes",
+                        "Autenticar em múltiplos sistemas ao mesmo tempo",
+                        "Uma técnica de criptografia avançada"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é Single Sign-On (SSO)?",
+                    options: [
+                        "Usar a mesma senha em todos os sistemas",
+                        "Um sistema que permite autenticar uma vez e acessar múltiplos sistemas",
+                        "Um método de autenticação usando apenas um fator",
+                        "Um protocolo de rede inseguro"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é o princípio do menor privilégio?",
+                    options: [
+                        "Dar aos usuários apenas as permissões necessárias para suas funções",
+                        "Usar a senha mais simples possível",
+                        "Ter o mínimo possível de usuários no sistema",
+                        "Um método de criptografia fraca"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "O que é auditoria de acesso?",
+                    options: [
+                        "Revisão periódica de logs de acesso a sistemas e dados",
+                        "Um tipo de ataque de força bruta",
+                        "Um método de autenticação",
+                        "Um protocolo de rede"
+                    ],
+                    correct: 0
+                }
+            ],
+            vulnerabilidades: [
+                {
+                    question: "O que é uma análise de vulnerabilidades?",
+                    options: [
+                        "Um ataque a sistemas",
+                        "O processo de identificar, quantificar e priorizar vulnerabilidades",
+                        "Uma política de segurança",
+                        "Um tipo de firewall"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é um teste de penetração?",
+                    options: [
+                        "Um ataque malicioso a sistemas",
+                        "Uma avaliação autorizada que simula ataques reais",
+                        "Um tipo de varredura de portas simples",
+                        "Um método de criptografia"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Qual é a diferença entre vulnerabilidade e exploit?",
+                    options: [
+                        "Vulnerabilidade é uma fraqueza, exploit é o código que a aproveita",
+                        "São a mesma coisa",
+                        "Vulnerabilidade é um ataque, exploit é a defesa",
+                        "Exploit é sempre legal, vulnerabilidade é ilegal"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "O que é CVE (Common Vulnerabilities and Exposures)?",
+                    options: [
+                        "Um tipo de vírus",
+                        "Uma lista padrão de identificadores para vulnerabilidades conhecidas",
+                        "Um protocolo de criptografia",
+                        "Um método de autenticação"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "O que é uma vulnerabilidade de dia zero?",
+                    options: [
+                        "Uma vulnerabilidade conhecida há muito tempo",
+                        "Uma vulnerabilidade que não tem patch disponível",
+                        "Uma vulnerabilidade que só afeta sistemas antigos",
+                        "Uma vulnerabilidade que ocorre à meia-noite"
+                    ],
+                    correct: 1
+                }
+            ]
+        };
+
+        // Inicialização da aplicação
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar se o usuário está logado
+            const savedUserData = localStorage.getItem('cybertrain-user');
+            if (savedUserData) {
+                userData = JSON.parse(savedUserData);
+                if (userData.isLoggedIn) {
+                    showPage('dashboard-page');
+                    updateDashboard();
+                } else {
+                    showPage('login-page');
+                }
+            } else {
+                showPage('login-page');
+            }
+
+            // Event Listeners para navegação
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    if (userData.isLoggedIn) {
+                        showPage(page + '-page');
+                        if (page === 'dashboard') {
+                            updateDashboard();
+                        }
+                    } else {
+                        showPage('login-page');
+                    }
+                });
+            });
+
+            // Event Listeners para autenticação
+            document.getElementById('show-register').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('register-page');
+            });
+
+            document.getElementById('show-login').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('login-page');
+            });
+
+            document.getElementById('login-btn').addEventListener('click', login);
+            document.getElementById('register-btn').addEventListener('click', register);
+            document.getElementById('logout-btn').addEventListener('click', logout);
+
+            // Event Listeners para quizzes
+            document.querySelectorAll('.start-quiz').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const module = this.getAttribute('data-module');
+                    startQuiz(module);
+                });
+            });
+
+            // Event Listeners para simulações
+            document.querySelectorAll('.start-simulation').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const simulation = this.getAttribute('data-simulation');
+                    openSimulation(simulation);
+                });
+            });
+
+            // Event Listeners para games
+            document.querySelectorAll('.start-game').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const game = this.getAttribute('data-game');
+                    openGame(game);
+                });
+            });
+
+            // Event Listeners para recursos
+            document.querySelectorAll('.open-resource').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const resource = this.getAttribute('data-resource');
+                    openResource(resource);
+                });
+            });
+
+            // Event Listeners para navegação do quiz
+            document.getElementById('quiz-next').addEventListener('click', nextQuestion);
+            document.getElementById('quiz-prev').addEventListener('click', prevQuestion);
+            document.getElementById('quiz-back-to-content').addEventListener('click', function() {
+                showPage('conteudos-page');
+            });
+
+            // Event Listeners para simulações específicas
+            document.getElementById('firewall-back').addEventListener('click', function() {
+                showPage('simulacoes-page');
+            });
+            
+            document.getElementById('firewall-check').addEventListener('click', function() {
+                checkFirewallSimulation();
+            });
+
+            document.getElementById('phishing-back').addEventListener('click', function() {
+                showPage('simulacoes-page');
+            });
+            
+            document.getElementById('phishing-check').addEventListener('click', function() {
+                checkPhishingSimulation();
+            });
+
+            document.getElementById('incidentes-back').addEventListener('click', function() {
+                showPage('simulacoes-page');
+            });
+            
+            document.getElementById('incidentes-check').addEventListener('click', function() {
+                checkIncidentesSimulation();
+            });
+
+            document.getElementById('malware-back').addEventListener('click', function() {
+                showPage('simulacoes-page');
+            });
+            
+            document.getElementById('malware-check').addEventListener('click', function() {
+                checkMalwareSimulation();
+            });
+
+            document.getElementById('invasao-back').addEventListener('click', function() {
+                showPage('simulacoes-page');
+            });
+            
+            document.getElementById('invasao-check').addEventListener('click', function() {
+                checkInvasaoSimulation();
+            });
+
+            // Event Listeners para games específicos
+            document.getElementById('vulnerabilidades-back').addEventListener('click', function() {
+                showPage('games-page');
+            });
+            
+            document.getElementById('vulnerabilidades-check').addEventListener('click', function() {
+                checkVulnerabilitiesGame();
+            });
+
+            document.getElementById('invasao-game-back').addEventListener('click', function() {
+                showPage('games-page');
+            });
+            
+            document.getElementById('invasao-game-check').addEventListener('click', function() {
+                checkInvasaoGame();
+            });
+
+            document.getElementById('firewall-game-back').addEventListener('click', function() {
+                showPage('games-page');
+            });
+            
+            document.getElementById('firewall-game-check').addEventListener('click', function() {
+                checkFirewallGame();
+            });
+
+            document.getElementById('senha-back').addEventListener('click', function() {
+                showPage('games-page');
+            });
+            
+            document.getElementById('senha-check').addEventListener('click', function() {
+                checkSenhaGame();
+            });
+
+            document.getElementById('phishing-game-back').addEventListener('click', function() {
+                showPage('games-page');
+            });
+            
+            document.getElementById('phishing-game-check').addEventListener('click', function() {
+                checkPhishingGame();
+            });
+
+            // Event Listeners para recursos específicos
+            document.getElementById('glossario-back').addEventListener('click', function() {
+                showPage('recursos-page');
+            });
+
+            document.getElementById('ferramentas-back').addEventListener('click', function() {
+                showPage('recursos-page');
+            });
+
+            document.getElementById('checklists-back').addEventListener('click', function() {
+                showPage('recursos-page');
+            });
+
+            document.getElementById('relatorios-back').addEventListener('click', function() {
+                showPage('recursos-page');
+            });
+
+            document.getElementById('feedback-back').addEventListener('click', function() {
+                showPage('recursos-page');
+            });
+
+            document.getElementById('feedback-submit').addEventListener('click', submitFeedback);
+
+            // Configurar seleção de opções nas simulações e games
+            document.querySelectorAll('.task-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+
+            // Configurar sistema de avaliação por estrelas
+            document.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    setStarRating(rating);
+                });
+            });
+
+            // Iniciar contador de tempo de estudo
+            if (userData.isLoggedIn) {
+                startStudyTimer();
+            }
+        });
+
+        // Funções de navegação
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Funções de autenticação
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Validação básica
+            if (!email || !password) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // Simulação de login bem-sucedido
+            userData.isLoggedIn = true;
+            userData.email = email;
+            localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+            
+            showPage('dashboard-page');
+            updateDashboard();
+            startStudyTimer();
+        }
+
+        function register() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+
+            // Validação básica
+            if (!name || !email || !password || !confirm) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            if (password !== confirm) {
+                alert('As senhas não coincidem.');
+                return;
+            }
+
+            // Simulação de registro bem-sucedido
+            userData.isLoggedIn = true;
+            userData.name = name;
+            userData.email = email;
+            localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+            
+            showPage('dashboard-page');
+            updateDashboard();
+            startStudyTimer();
+        }
+
+        function logout() {
+            userData.isLoggedIn = false;
+            localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+            showPage('login-page');
+        }
+
+        // Funções do dashboard
+        function updateDashboard() {
+            document.getElementById('overall-score').textContent = userData.overallScore;
+            document.getElementById('completed-content').textContent = `${userData.completedContent}/30`;
+            document.getElementById('study-time').textContent = formatStudyTime(userData.studyTime);
+            document.getElementById('achievements-count').textContent = `${userData.achievements}/15`;
+
+            // Atualizar também na página de desempenho
+            document.getElementById('performance-score').textContent = userData.overallScore;
+            document.getElementById('performance-content').textContent = `${userData.completedContent}/30`;
+            document.getElementById('performance-simulations').textContent = `${userData.completedSimulations}/10`;
+            document.getElementById('performance-games').textContent = `${userData.completedGames}/7`;
+        }
+
+        function formatStudyTime(minutes) {
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${hours}h ${mins}m`;
+        }
+
+        function startStudyTimer() {
+            // Incrementar o tempo de estudo a cada minuto
+            setInterval(() => {
+                userData.studyTime++;
+                localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                updateDashboard();
+            }, 60000); // 1 minuto
+        }
+
+        // Funções do quiz
+        function startQuiz(module) {
+            currentQuiz = {
+                module: module,
+                questions: quizQuestions[module],
+                currentQuestion: 0,
+                score: 0,
+                userAnswers: new Array(quizQuestions[module].length).fill(null)
+            };
+
+            document.getElementById('quiz-title').textContent = `Quiz: ${getModuleName(module)}`;
+            showPage('quiz-page');
+            displayQuestion();
+        }
+
+        function getModuleName(module) {
+            const moduleNames = {
+                fundamentos: 'Fundamentos de Segurança do Senai',
+                redes: 'Segurança em Redes do Senai',
+                criptografia: 'Criptografia do Senai',
+                firewalls: 'Firewalls e IDS/IPS do Senai',
+                gestao: 'Gestão de Identidade e Acesso do Senai',
+                vulnerabilidades: 'Análise de Vulnerabilidades do Senai'
+            };
+            return moduleNames[module] || module;
+        }
+
+        function displayQuestion() {
+            const question = currentQuiz.questions[currentQuiz.currentQuestion];
+            document.getElementById('quiz-question').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'quiz-option';
+                if (currentQuiz.userAnswers[currentQuiz.currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                }
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            document.getElementById('quiz-progress').textContent = `${currentQuiz.currentQuestion + 1}/${currentQuiz.questions.length}`;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQuiz.currentQuestion + 1) / currentQuiz.questions.length) * 100}%`;
+            
+            // Atualizar estado dos botões de navegação
+            document.getElementById('quiz-prev').disabled = currentQuiz.currentQuestion === 0;
+            document.getElementById('quiz-next').textContent = 
+                currentQuiz.currentQuestion === currentQuiz.questions.length - 1 ? 'Finalizar' : 'Próxima';
+        }
+
+        function selectOption(optionIndex) {
+            currentQuiz.userAnswers[currentQuiz.currentQuestion] = optionIndex;
+            
+            // Atualizar visualização das opções
+            document.querySelectorAll('.quiz-option').forEach((option, index) => {
+                if (index === optionIndex) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+
+        function nextQuestion() {
+            if (currentQuiz.userAnswers[currentQuiz.currentQuestion] === null) {
+                alert('Por favor, selecione uma resposta antes de continuar.');
+                return;
+            }
+            
+            if (currentQuiz.currentQuestion === currentQuiz.questions.length - 1) {
+                finishQuiz();
+            } else {
+                currentQuiz.currentQuestion++;
+                displayQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuiz.currentQuestion > 0) {
+                currentQuiz.currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            // Calcular pontuação
+            let score = 0;
+            currentQuiz.questions.forEach((question, index) => {
+                if (currentQuiz.userAnswers[index] === question.correct) {
+                    score++;
+                }
+            });
+            
+            currentQuiz.score = score;
+            
+            // Atualizar dados do usuário
+            userData.overallScore += score * 10;
+            userData.completedContent++;
+            userData.moduleProgress[currentQuiz.module]++;
+            
+            // Verificar conquistas
+            if (userData.completedContent === 1) {
+                userData.achievements++;
+                alert('🎉 Conquista desbloqueada: Primeiros Passos!');
+            }
+            
+            if (score === currentQuiz.questions.length) {
+                userData.achievements++;
+                alert('🎉 Conquista desbloqueada: Perfeccionista!');
+            }
+            
+            localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+            
+            // Mostrar resultados
+            showPage('quiz-results-page');
+            document.getElementById('quiz-final-score').textContent = `${score}/${currentQuiz.questions.length}`;
+            
+            let message = '';
+            if (score === currentQuiz.questions.length) {
+                message = '🎉 Excelente! Você acertou todas as questões!';
+            } else if (score >= currentQuiz.questions.length * 0.7) {
+                message = '👍 Bom trabalho! Você demonstrou um bom conhecimento do assunto.';
+            } else if (score >= currentQuiz.questions.length * 0.5) {
+                message = '😊 Resultado satisfatório. Continue estudando para melhorar!';
+            } else {
+                message = '📚 É preciso estudar mais este conteúdo. Revise o material e tente novamente!';
+            }
+            
+            document.getElementById('quiz-result-message').textContent = message;
+        }
+
+        // Funções para simulações
+        function openSimulation(simulation) {
+            if (simulation === 'firewall') {
+                showPage('simulation-firewall-page');
+                resetSimulationOptions('simulation-firewall-page');
+            } else if (simulation === 'phishing') {
+                showPage('simulation-phishing-page');
+                resetSimulationOptions('simulation-phishing-page');
+            } else if (simulation === 'incidentes') {
+                showPage('simulation-incidentes-page');
+                resetSimulationOptions('simulation-incidentes-page');
+            } else if (simulation === 'malware') {
+                showPage('simulation-malware-page');
+                resetSimulationOptions('simulation-malware-page');
+            } else if (simulation === 'invasao') {
+                showPage('simulation-invasao-page');
+                resetSimulationOptions('simulation-invasao-page');
+            } else {
+                alert(`Simulação "${simulation}" será implementada em breve!`);
+            }
+        }
+
+        function resetSimulationOptions(pageId) {
+            document.querySelectorAll(`#${pageId} .task-option`).forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll(`#${pageId} .simulation-result`).forEach(result => {
+                result.style.display = 'none';
+            });
+        }
+
+        function checkFirewallSimulation() {
+            const page = document.getElementById('simulation-firewall-page');
+            const selectedOptions = page.querySelectorAll('.task-option.selected');
+            let correctCount = 0;
+            let totalCorrect = 0;
+            
+            // Contar opções corretas totais
+            page.querySelectorAll('.task-option[data-correct="true"]').forEach(() => {
+                totalCorrect++;
+            });
+            
+            // Verificar opções selecionadas
+            selectedOptions.forEach(option => {
+                if (option.getAttribute('data-correct') === 'true') {
+                    correctCount++;
+                }
+            });
+            
+            const resultDiv = document.getElementById('firewall-result');
+            
+            if (correctCount === totalCorrect && selectedOptions.length === totalCorrect) {
+                resultDiv.className = 'simulation-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Configuração Correta!</h4><p>Parabéns! Você configurou o firewall corretamente, permitindo apenas o tráfego necessário e bloqueando portas potencialmente perigosas.</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedSimulationsList.includes('firewall')) {
+                    userData.completedSimulationsList.push('firewall');
+                    userData.completedSimulations++;
+                    userData.overallScore += 50;
+                    
+                    // Verificar conquista
+                    if (userData.completedSimulations === 5) {
+                        userData.achievements++;
+                        alert('🎉 Conquista desbloqueada: Defensor!');
+                    }
+                    
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'simulation-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Configuração Incorreta</h4><p>Sua configuração não está totalmente correta. Reveja as portas que selecionou e tente novamente.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function checkPhishingSimulation() {
+            const page = document.getElementById('simulation-phishing-page');
+            const selectedOptions = page.querySelectorAll('.task-option.selected');
+            let correctCount = 0;
+            let totalCorrect = 0;
+            
+            // Contar opções corretas totais
+            page.querySelectorAll('.task-option[data-correct="true"]').forEach(() => {
+                totalCorrect++;
+            });
+            
+            // Verificar opções selecionadas
+            selectedOptions.forEach(option => {
+                if (option.getAttribute('data-correct') === 'true') {
+                    correctCount++;
+                }
+            });
+            
+            const resultDiv = document.getElementById('phishing-result');
+            
+            if (correctCount === totalCorrect && selectedOptions.length === totalCorrect) {
+                resultDiv.className = 'simulation-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Análise Correta!</h4><p>Parabéns! Você identificou corretamente os e-mails de phishing. O primeiro e-mail tinha vários sinais: domínio incorreto, URL suspeita e sensação de urgência artificial.</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedSimulationsList.includes('phishing')) {
+                    userData.completedSimulationsList.push('phishing');
+                    userData.completedSimulations++;
+                    userData.overallScore += 50;
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'simulation-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Análise Incorreta</h4><p>Sua análise não está totalmente correta. Reveja os e-mails e preste atenção aos detalhes como domínios, URLs e tom da mensagem.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function checkIncidentesSimulation() {
+            const timeline = document.getElementById('incident-timeline');
+            const events = Array.from(timeline.querySelectorAll('.timeline-event'));
+            let correctOrder = true;
+            
+            events.forEach((event, index) => {
+                const correctPosition = parseInt(event.getAttribute('data-correct'));
+                if (correctPosition !== index + 1) {
+                    correctOrder = false;
+                    event.classList.add('incorrect');
+                    event.classList.remove('correct');
+                } else {
+                    event.classList.add('correct');
+                    event.classList.remove('incorrect');
+                }
+            });
+            
+            const resultDiv = document.getElementById('incidentes-result');
+            
+            if (correctOrder) {
+                resultDiv.className = 'simulation-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Ordem Correta!</h4><p>Parabéns! Você seguiu o protocolo correto de resposta a incidentes: isolar, coletar evidências, identificar, eliminar e documentar.</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedSimulationsList.includes('incidentes')) {
+                    userData.completedSimulationsList.push('incidentes');
+                    userData.completedSimulations++;
+                    userData.overallScore += 50;
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'simulation-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Ordem Incorreta</h4><p>A ordem das ações não está correta. Lembre-se: primeiro isolar o sistema, depois coletar evidências, identificar o problema, eliminar a ameaça e finalmente documentar.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function checkMalwareSimulation() {
+            const page = document.getElementById('simulation-malware-page');
+            const selectedOptions = page.querySelectorAll('.task-option.selected');
+            let correctCount = 0;
+            let totalCorrect = 0;
+            
+            // Contar opções corretas totais
+            page.querySelectorAll('.task-option[data-correct="true"]').forEach(() => {
+                totalCorrect++;
+            });
+            
+            // Verificar opções selecionadas
+            selectedOptions.forEach(option => {
+                if (option.getAttribute('data-correct') === 'true') {
+                    correctCount++;
+                }
+            });
+            
+            const resultDiv = document.getElementById('malware-result');
+            
+            if (correctCount === totalCorrect && selectedOptions.length === totalCorrect) {
+                resultDiv.className = 'simulation-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Análise Correta!</h4><p>Excelente! Você identificou corretamente os comportamentos maliciosos: roubo de credenciais, estabelecimento de persistência e criptografia de arquivos (ransomware).</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedSimulationsList.includes('malware')) {
+                    userData.completedSimulationsList.push('malware');
+                    userData.completedSimulations++;
+                    userData.overallScore += 50;
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'simulation-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Análise Incompleta</h4><p>Você não identificou todos os comportamentos maliciosos. Reveja o código e preste atenção às funções que acessam arquivos de credenciais, modificam o registro e criptografam arquivos.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function checkInvasaoSimulation() {
+            const page = document.getElementById('simulation-invasao-page');
+            const selectedOptions = page.querySelectorAll('.task-option.selected');
+            let correctCount = 0;
+            let totalCorrect = 0;
+            
+            // Contar opções corretas totais
+            page.querySelectorAll('.task-option[data-correct="true"]').forEach(() => {
+                totalCorrect++;
+            });
+            
+            // Verificar opções selecionadas
+            selectedOptions.forEach(option => {
+                if (option.getAttribute('data-correct') === 'true') {
+                    correctCount++;
+                }
+            });
+            
+            const resultDiv = document.getElementById('invasao-result');
+            
+            if (correctCount === totalCorrect && selectedOptions.length === totalCorrect) {
+                resultDiv.className = 'simulation-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Abordagem Correta!</h4><p>Perfeito! Você demonstrou conhecimento das fases de um teste de invasão ética: reconhecimento com varredura, enumeração e OSINT, seguido de pesquisa de exploits e documentação.</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedSimulationsList.includes('invasao')) {
+                    userData.completedSimulationsList.push('invasao');
+                    userData.completedSimulations++;
+                    userData.overallScore += 50;
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'simulation-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Abordagem Incorreta</h4><p>Sua abordagem não está totalmente correta. Lembre-se: em um teste ético, sempre comece com reconhecimento, pesquise exploits antes de explorar e documente tudo.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        // Funções para games
+        function openGame(game) {
+            if (game === 'vulnerabilidades') {
+                showPage('game-vulnerabilidades-page');
+                resetGameOptions('game-vulnerabilidades-page');
+            } else if (game === 'invasao') {
+                showPage('game-invasao-page');
+                resetGameOptions('game-invasao-page');
+            } else if (game === 'firewall') {
+                showPage('game-firewall-page');
+                resetGameOptions('game-firewall-page');
+            } else if (game === 'senha') {
+                showPage('game-senha-page');
+                resetGameOptions('game-senha-page');
+            } else if (game === 'phishing') {
+                showPage('game-phishing-page');
+                resetGameOptions('game-phishing-page');
+            } else {
+                alert(`Game "${game}" será implementado em breve!`);
+            }
+        }
+
+        function resetGameOptions(pageId) {
+            document.querySelectorAll(`#${pageId} .task-option`).forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll(`#${pageId} .game-result`).forEach(result => {
+                result.style.display = 'none';
+            });
+        }
+
+        function checkVulnerabilitiesGame() {
+            const page = document.getElementById('game-vulnerabilidades-page');
+            const selectedOptions = page.querySelectorAll('.task-option.selected');
+            let correctCount = 0;
+            let totalCorrect = 0;
+            
+            // Contar opções corretas totais
+            page.querySelectorAll('.task-option[data-correct="true"]').forEach(() => {
+                totalCorrect++;
+            });
+            
+            // Verificar opções selecionadas
+            selectedOptions.forEach(option => {
+                if (option.getAttribute('data-correct') === 'true') {
+                    correctCount++;
+                }
+            });
+            
+            const resultDiv = document.getElementById('vulnerabilidades-result');
+            
+            if (correctCount === totalCorrect && selectedOptions.length === totalCorrect) {
+                resultDiv.className = 'game-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Parabéns!</h4><p>Você identificou corretamente todas as vulnerabilidades no código! As principais vulnerabilidades eram: Injeção SQL, uso de função descontinuada e falta de validação de entrada.</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedGamesList.includes('vulnerabilidades')) {
+                    userData.completedGamesList.push('vulnerabilidades');
+                    userData.completedGames++;
+                    userData.overallScore += 30;
+                    
+                    // Verificar conquista
+                    if (userData.completedGames === 3) {
+                        userData.achievements++;
+                        alert('🎉 Conquista desbloqueada: Jogador!');
+                    }
+                    
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'game-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Identificação Incompleta</h4><p>Você não identificou todas as vulnerabilidades corretamente. Tente novamente, prestando atenção às vulnerabilidades mais comuns em aplicações web.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function checkInvasaoGame() {
+            const page = document.getElementById('game-invasao-page');
+            const selectedOptions = page.querySelectorAll('.task-option.selected');
+            let correctCount = 0;
+            let totalCorrect = 0;
+            
+            // Contar opções corretas totais
+            page.querySelectorAll('.task-option[data-correct="true"]').forEach(() => {
+                totalCorrect++;
+            });
+            
+            // Verificar opções selecionadas
+            selectedOptions.forEach(option => {
+                if (option.getAttribute('data-correct') === 'true') {
+                    correctCount++;
+                }
+            });
+            
+            const resultDiv = document.getElementById('invasao-game-result');
+            
+            if (correctCount === totalCorrect && selectedOptions.length === totalCorrect) {
+                resultDiv.className = 'game-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Escolhas Corretas!</h4><p>Excelente! Você selecionou as ferramentas e técnicas apropriadas para um teste de invasão ética, demonstrando conhecimento das práticas aceitáveis.</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedGamesList.includes('invasao')) {
+                    userData.completedGamesList.push('invasao');
+                    userData.completedGames++;
+                    userData.overallScore += 30;
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'game-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Escolhas Incorretas</h4><p>Algumas de suas escolhas não são apropriadas para um teste de invasão ética. Lembre-se: ferramentas como LOIC e keyloggers não são éticas em testes autorizados.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function checkFirewallGame() {
+            // Implementação simplificada para o jogo de combinação
+            const resultDiv = document.getElementById('firewall-game-result');
+            resultDiv.className = 'game-result result-success';
+            resultDiv.innerHTML = '<h4>✅ Combinações Corretas!</h4><p>Parabéns! Você relacionou corretamente cada tipo de ataque com a regra de firewall adequada para bloqueá-lo.</p>';
+            resultDiv.style.display = 'block';
+            
+            // Atualizar dados do usuário
+            if (!userData.completedGamesList.includes('firewall')) {
+                userData.completedGamesList.push('firewall');
+                userData.completedGames++;
+                userData.overallScore += 30;
+                localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                updateDashboard();
+            }
+        }
+
+        function checkSenhaGame() {
+            const page = document.getElementById('game-senha-page');
+            const selectedOptions = page.querySelectorAll('.task-option.selected');
+            let correctCount = 0;
+            let totalCorrect = 0;
+            
+            // Contar opções corretas totais
+            page.querySelectorAll('.task-option[data-correct="true"]').forEach(() => {
+                totalCorrect++;
+            });
+            
+            // Verificar opções selecionadas
+            selectedOptions.forEach(option => {
+                if (option.getAttribute('data-correct') === 'true') {
+                    correctCount++;
+                }
+            });
+            
+            const resultDiv = document.getElementById('senha-result');
+            
+            if (correctCount === totalCorrect && selectedOptions.length === totalCorrect) {
+                resultDiv.className = 'game-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Análise Correta!</h4><p>Perfeito! Você identificou corretamente a força das senhas e conhece as características de uma senha forte.</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedGamesList.includes('senha')) {
+                    userData.completedGamesList.push('senha');
+                    userData.completedGames++;
+                    userData.overallScore += 30;
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'game-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Análise Incorreta</h4><p>Sua análise não está totalmente correta. Lembre-se: senhas fortes têm pelo menos 12 caracteres, combinam diferentes tipos de caracteres e não usam palavras comuns.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function checkPhishingGame() {
+            const page = document.getElementById('game-phishing-page');
+            const selectedOptions = page.querySelectorAll('.task-option.selected');
+            let correctCount = 0;
+            let totalCorrect = 0;
+            
+            // Contar opções corretas totais
+            page.querySelectorAll('.task-option[data-correct="true"]').forEach(() => {
+                totalCorrect++;
+            });
+            
+            // Verificar opções selecionadas
+            selectedOptions.forEach(option => {
+                if (option.getAttribute('data-correct') === 'true') {
+                    correctCount++;
+                }
+            });
+            
+            const resultDiv = document.getElementById('phishing-game-result');
+            
+            if (correctCount === totalCorrect && selectedOptions.length === totalCorrect) {
+                resultDiv.className = 'game-result result-success';
+                resultDiv.innerHTML = '<h4>✅ Análise Correta!</h4><p>Excelente! Você identificou todos os sinais de phishing no e-mail: domínio incorreto, URL suspeita e sensação de urgência artificial.</p>';
+                
+                // Atualizar dados do usuário
+                if (!userData.completedGamesList.includes('phishing')) {
+                    userData.completedGamesList.push('phishing');
+                    userData.completedGames++;
+                    userData.overallScore += 30;
+                    localStorage.setItem('cybertrain-user', JSON.stringify(userData));
+                    updateDashboard();
+                }
+            } else {
+                resultDiv.className = 'game-result result-failure';
+                resultDiv.innerHTML = '<h4>❌ Análise Incompleta</h4><p>Você não identificou todos os sinais de phishing. Preste atenção aos detalhes como domínios similares (mas não idênticos), URLs sem HTTPS e tom urgente da mensagem.</p>';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        // Funções para recursos
+        function openResource(resource) {
+            if (resource === 'glossario') {
+                showPage('resource-glossario-page');
+            } else if (resource === 'ferramentas') {
+                showPage('resource-ferramentas-page');
+            } else if (resource === 'checklists') {
+                showPage('resource-checklists-page');
+            } else if (resource === 'relatorios') {
+                showPage('resource-relatorios-page');
+            } else if (resource === 'feedback') {
+                showPage('resource-feedback-page');
+            } else {
+                alert(`Recurso "${resource}" será implementado em breve!`);
+            }
+        }
+
+        // Funções para feedback
+        function setStarRating(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                const starRating = parseInt(star.getAttribute('data-rating'));
+                if (starRating <= rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function submitFeedback() {
+            const name = document.getElementById('feedback-name').value;
+            const email = document.getElementById('feedback-email').value;
+            const message = document.getElementById('feedback-message').value;
+            
+            // Verificar se há uma avaliação por estrelas
+            const activeStars = document.querySelectorAll('.star.active');
+            if (activeStars.length === 0) {
+                alert('Por favor, avalie a plataforma com as estrelas.');
+                return;
+            }
+            
+            if (!name || !email || !message) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            // Simular envio do feedback
+            alert('Obrigado pelo seu feedback! Sua avaliação foi enviada com sucesso.');
+            
+            // Limpar o formulário
+            document.getElementById('feedback-name').value = '';
+            document.getElementById('feedback-email').value = '';
+            document.getElementById('feedback-message').value = '';
+            setStarRating(0);
+            
+            // Voltar para a página de recursos
+            showPage('recursos-page');
+        }
+    </script>
+</body>
+</html>
